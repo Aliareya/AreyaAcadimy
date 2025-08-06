@@ -5,6 +5,9 @@ function Topbar({ setShowSidebar }) {
   const handlesidebar = () =>{
     setShowSidebar(true)
   }
+
+  const date =new Date();
+  const today = date.toDateString();
  
 
   return (
@@ -19,6 +22,7 @@ function Topbar({ setShowSidebar }) {
         </button>
 
         <h1 className="text-lg font-semibold hidden md:block sm:hidden">Areya Acadimy</h1>
+        <h1 className='md:hidden sm:hidden text-gray-600 font-medium'>{today}</h1>
       </div>
 
       {/* Right - Notification + User Info */}
