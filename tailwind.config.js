@@ -7,7 +7,7 @@ module.exports = {
       sm: { max: "700px" },
       md: { min: "701px", max: "970px" },
       lg: { min: "971px", max: "1270px" },
-      xl: { min: "1271px", max: "1536px" },
+      xl: { min: "1271px" },
     },
   },
   plugins: [],

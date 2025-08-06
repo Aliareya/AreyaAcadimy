@@ -9,6 +9,10 @@ body{
   font-style: normal;
   
 }
+
+.sidebarColor {
+  background: linear-gradient(135deg, hsl(197 95% 92%), hsl(214 95% 88%));;
+}
 .lato-thin {
   font-family: "Lato", sans-serif;
   font-weight: 100;
