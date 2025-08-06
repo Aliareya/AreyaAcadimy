@@ -8,6 +8,8 @@ import Home from './pages/home/Home';
 import Student from './pages/student/Student';
 import Teachers from './pages/teacher/Teachers';
 import Attendance from './pages/attendence/Attendance';
+import Signup from './auth/Signup';
+import Login from './auth/Login';
 
 
 
@@ -19,6 +21,14 @@ function App() {
   const onToggleSidebar = () => {
     setShowSidebar(!showSidebar);
   };
+
+  if (location.pathname === '/signup' || location.pathname === "/login") {
+    if(location.pathname === '/signup'){
+      return <Signup />;
+    }else if(location.pathname === '/login'){
+      return <Login />;
+    }
+  }
 
 
 
@@ -49,6 +59,7 @@ function App() {
             <Route path='/student' element={<Student/>}/>
             <Route path='/teacher' element={<Teachers/>}/>
             <Route path='/attendance' element={<Attendance/>}/>
+            <Route path='/signup' element={<Signup/>}/>
           </Routes>
         </div>
       </div>
