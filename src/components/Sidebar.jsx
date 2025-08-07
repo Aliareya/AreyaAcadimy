@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react';
 import MenuCart from './MenuCart';
 import { useStaticData } from '../contex/StaticDataContext';
 
-function Sidebar({onToggleSidebar}) {
+function Sidebar({onToggleSidebar ,setShowSidebar}) {
   const {Menu} = useStaticData();
   return (
     <div className='w-full'>
@@ -16,7 +16,7 @@ function Sidebar({onToggleSidebar}) {
       <div className='w-full max-h-[ceil(100%-64px)] lg:h-[400px] md:h-[400px] sm:h-[500px] xl:overflow-y-auto px-2 mt-4 flex flex-col gap-2 overflow-y-scroll'>
         {Menu.map((menu , index)=>{
           return(
-            <MenuCart menu={menu} key={index}/>
+            <MenuCart menu={menu} key={index} setShowSidebar={setShowSidebar} />
           )
         })}
       </div>

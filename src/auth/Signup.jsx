@@ -18,7 +18,7 @@ function Signup() {
     <div style={{backgroundImage : `url(${bg})`}} className="bg-center bg-cover min-h-screen flex items-center pr-20 sm:justify-center  lg:pr-10 md:pr-0 sm:pr-0 md:justify-center justify-end bg-slate-100 sm:px-0 px-4">
       <div className="max-w-md w-full backdrop-brightness-110 sm:backdrop-brightness-150 p-8 lg:p-5  rounded-xl sm:p-3 shadow-xl lg:my-5 md:my-7 sm:my-5 sm:mx-1">
         <h2 className="text-2xl font-bold text-center text-blue-600 mb-6">Create Your Account</h2>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
           
           <div>
             <label className="block text-sm sm:font-semibold sm:text-base font-medium text-gray-700">Full Name  {errors.name && <span className="text-sm text-red-500 mt-1">({errors.name.message})</span>}</label>
@@ -26,6 +26,15 @@ function Signup() {
               {...register("name", { required: "Name is required" })}
               className="w-full text-[#355460] placeholder:text-[#608c9e] bg-[#a6d9ef] border-none outline-none mt-1 px-4 py-2 border rounded-md shadow-sm "
               placeholder="Your full name"
+            />
+           
+          </div>
+          <div>
+            <label className="block text-sm sm:font-semibold sm:text-base font-medium text-gray-700">username  {errors.name && <span className="text-sm text-red-500 mt-1">({errors.name.username})</span>}</label>
+            <input
+              {...register("username", { required: "Name is required" })}
+              className="w-full text-[#355460] placeholder:text-[#608c9e] bg-[#a6d9ef] border-none outline-none mt-1 px-4 py-2 border rounded-md shadow-sm "
+              placeholder="Your Username"
             />
            
           </div>
