@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { Route, Routes, useLocation } from "react-router-dom";
+
 import Sidebar from "./components/Sidebar";
 import Topbar from "./components/Topbar";
-import { Route, Routes } from "react-router-dom";
 
-//import pages
+// import pages
 import Home from "./pages/home/Home";
 import Student from "./pages/student/Student";
 import Teachers from "./pages/teacher/Teachers";
@@ -16,23 +17,20 @@ import RecordAttendance from "./pages/attendence/RecordAttendance";
 
 function App() {
   const [showSidebar, setShowSidebar] = useState(false);
+  const location = useLocation();
+
+  // check if current page is login/signup
+  const isAuthPage = location.pathname === "/signup" || location.pathname === "/login";
 
   // Toggle handler
   const onToggleSidebar = () => {
     setShowSidebar(!showSidebar);
   };
 
-  if (location.pathname === "/signup" || location.pathname === "/login") {
-    if (location.pathname === "/signup") {
-      return <Signup />;
-    } else if (location.pathname === "/login") {
-      return <Login />;
-    }
-  }
-
   return (
-    <div className="w-full flex ">
-      {showSidebar && (
+    <div className="w-full flex">
+      {/* نمایش sidebar فقط اگر در صفحه login/signup نیست */}
+      {!isAuthPage && showSidebar && (
         <div
           className="fixed inset-0 z-50 bg-black bg-opacity-50 lg:hidden"
           onClick={onToggleSidebar}
@@ -50,15 +48,21 @@ function App() {
         </div>
       )}
 
-      <div className="w-1/6 lg:w-1/5 min-h-screen md:hidden sm:hidden border-r border-gray-300 bg-slate-100">
-        <div className="w-1/6 lg:w-1/5 fixed">
-          <Sidebar onToggleSidebar={onToggleSidebar} setShowSidebar={setShowSidebar} />
+      {!isAuthPage && (
+        <div className="w-1/6 lg:w-1/5 min-h-screen md:hidden sm:hidden border-r border-gray-300 bg-slate-100">
+          <div className="w-1/6 lg:w-1/5 fixed">
+            <Sidebar onToggleSidebar={onToggleSidebar} setShowSidebar={setShowSidebar} />
+          </div>
         </div>
-      </div>
-      <div className="w-5/6 lg:w-4/5 md:w-full sm:w-full ">
-        <div className="w-full h-16 bg-slate-300 sticky z-40 top-0">
-          <Topbar setShowSidebar={setShowSidebar} />
-        </div>
+      )}
+
+      <div className={isAuthPage ? "w-full" : "w-5/6 lg:w-4/5 md:w-full sm:w-full"}>
+        {!isAuthPage && (
+          <div className="w-full h-16 bg-slate-300 sticky z-40 top-0">
+            <Topbar setShowSidebar={setShowSidebar} />
+          </div>
+        )}
+
         <div className="w-full h-fit bg-slate-50">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -67,6 +71,7 @@ function App() {
             <Route path="/attendance" element={<Attendance />} />
             <Route path="/roles" element={<Roles />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/addstudent" element={<AddStudent />} />
             <Route path="/recordAttendance" element={<RecordAttendance />} />
           </Routes>

@@ -59,7 +59,7 @@ function Login() {
             type="submit"
             className="w-full  bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300"
           >
-            Sign Up
+            login
           </button>
         </form>
         <p className="mt-4 text-sm sm:font-semibold sm:text-base  text-center text-gray-500">
