@@ -10,6 +10,7 @@ const Menu = [
   {title : "Attendance" , icon:"uil:notes" , path:"/attendance"},
   {title : "Enrollment" , icon:"fluent-mdl2:open-enrollment" , path:"/enrollment"},
   {title : "Add student" , icon:"cuida:user-add-outline" , path:"/addstudent"},
+  {title : "Record Attendance" , icon:"cuida:user-add-outline" , path:"/recordAttendance"},
   {title : "User Roles" , icon:"oui:app-users-roles" , path:"/roles"},
   {title : "Profile" , icon:"ix:user-profile-filled" , path:"/profile"},
   {title : "Settings" , icon:"lets-icons:setting-line" , path:"/settings"},

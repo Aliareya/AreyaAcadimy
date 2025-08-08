@@ -12,6 +12,7 @@ import Signup from "./auth/Signup";
 import Login from "./auth/Login";
 import Roles from "./pages/roles/Roles";
 import AddStudent from "./pages/addstudent/AddStudent";
+import RecordAttendance from "./pages/attendence/RecordAttendance";
 
 function App() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -67,6 +68,7 @@ function App() {
             <Route path="/roles" element={<Roles />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/addstudent" element={<AddStudent />} />
+            <Route path="/recordAttendance" element={<RecordAttendance />} />
           </Routes>
         </div>
       </div>
