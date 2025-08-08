@@ -16,6 +16,7 @@ import Login from "./auth/Login";
 import Roles from "./pages/roles/Roles";
 import AddStudent from "./pages/addstudent/AddStudent";
 import RecordAttendance from "./pages/attendence/RecordAttendance";
+import Profile from "./pages/profile/Profile";
 
 function App() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -90,6 +91,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/addstudent" element={<AddStudent />} />
             <Route path="/recordAttendance" element={<RecordAttendance />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </div>
       </div>

@@ -15,7 +15,7 @@ import { useUser } from '../../contex/UserContext';
 
 export default function Home() {
   const {user} = useUser();
-  console.log(user);
+  console.log("user: ",user);
   return (
     <div className="p-4 space-y-6">
       {/* Header */}
