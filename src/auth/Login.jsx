@@ -1,19 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import bg from "../assets/images/Dbg.jpg"
+import axios from 'axios';
+import { useAPI } from '../contex/ApiContext';
+import { toast } from 'react-toastify';
+import { useUser } from '../contex/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
-
-  const email = watch("email");
-  // console.log('Signup data:', email);
+  const [loading , setLoading] = useState(false)
+  const navigate = useNavigate();
+  const {setUser} = useUser();
+  const {apiUrl} = useAPI()
+  const {register,handleSubmit,formState: { errors }} = useForm();
 
   const onSubmit = (data) => {
+    axios.post(`${apiUrl}/auth/login.php` , data)
+    .then((res)=>{
+      setLoading(true)
+      const data = res?.data;
+      localStorage.setItem("acadimy_user" , JSON.stringify(data?.user));
+      localStorage.setItem("token" ,data?.token);
+      setUser(data?.user);
+      toast.success(res.data.message);
+      setTimeout(()=>{
+        navigate("/");
+        setLoading(flase)
+      },1000)
+    })
+    .catch((err)=>{
+      toast.error(err?.response?.data?.message);
+    })
   };
 
   return (
@@ -59,7 +76,7 @@ function Login() {
             type="submit"
             className="w-full  bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300"
           >
-            login
+           {loading ? "Loading..." : "login"}
           </button>
         </form>
         <p className="mt-4 text-sm sm:font-semibold sm:text-base  text-center text-gray-500">

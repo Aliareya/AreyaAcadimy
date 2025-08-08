@@ -11,8 +11,11 @@ import {
 } from 'lucide-react';
 
 import bg  from "../../assets/images/Dbg.jpg";
+import { useUser } from '../../contex/UserContext';
 
 export default function Home() {
+  const {user} = useUser();
+  console.log(user);
   return (
     <div className="p-4 space-y-6">
       {/* Header */}

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Sidebar from "./components/Sidebar";
 import Topbar from "./components/Topbar";
@@ -29,6 +31,20 @@ function App() {
 
   return (
     <div className="w-full flex">
+       <ToastContainer
+            position="top-right"
+            autoClose={1000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeButton={false}
+            closeOnClick
+            rtl={false}
+            theme="light"
+            toastClassName={() =>
+              "relative mt-5 flex bg-[#a6d9ef] p-4 rounded-lg text-gray-600 shadow-xl border border-gray-500"
+            }
+            bodyClassName={() => "text-sm font-medium "}
+          />
       {/* نمایش sidebar فقط اگر در صفحه login/signup نیست */}
       {!isAuthPage && showSidebar && (
         <div
