@@ -1,7 +1,12 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
+import { useUser } from '../contex/UserContext';
+import { useAPI } from '../contex/ApiContext';
 
 function Topbar({ setShowSidebar }) {
+  const {user} = useUser();
+  const {imageurl} = useAPI();
+  
   const handlesidebar = () =>{
     setShowSidebar(true)
   }
@@ -34,11 +39,11 @@ function Topbar({ setShowSidebar }) {
         </button>
 
         {/* Username */}
-        <span className="text-gray-700 font-medium">Alireza</span>
+        <span className="text-gray-700 font-medium">{user?.name}</span>
 
         {/* User avatar */}
         <img
-          src="https://i.pravatar.cc/300?img=12"
+          src={`${imageurl}/${user?.imgUrl}`}
           alt="User"
           className="w-8 h-8 rounded-full object-cover border"
         />

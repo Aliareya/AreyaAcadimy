@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 export default function Profile() {
-  const { user, setUser  } = useUser();
+  const { user, setUser ,Fetchuser } = useUser();
   const { imageurl, apiUrl ,token } = useAPI();
 
   const fileInputRef = useRef(null);
@@ -16,6 +16,7 @@ export default function Profile() {
     user?.imgUrl ? `${imageurl}${user.imgUrl}` : null
   );
   const [imageFile, setImageFile] = useState(null); 
+
   // React Hook Form setup
   const {
     register,
@@ -87,10 +88,10 @@ export default function Profile() {
           "Authorization" : `Bearer ${token}`
         }
       });
-      console.log("response" , response)
 
       if (response.data.success) {
         toast.success("Profile updated successfully!");
+        Fetchuser()
         setUser((prevUser) => ({
           ...prevUser,
           name: data.name,
@@ -99,15 +100,18 @@ export default function Profile() {
         }));
         setIsEdit(false);
         setImageFile(null);
-        // fetchUser();
       } else {
+        console.log(response)
         toast.error(response.data.message || "Failed to update profile.");
       }
     } catch (error) {
-      console.error(error);
       toast.error("An error occurred while updating profile.");
     }
   };
+
+  useEffect(()=>{
+    Fetchuser()
+  },[])
 
   return (
     <div className="min-h-screen bg-gray-100 p-8 sm:p-3">
