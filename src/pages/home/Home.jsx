@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   CalendarDays,
   ClipboardList,
@@ -12,10 +12,25 @@ import {
 
 import bg  from "../../assets/images/Dbg.jpg";
 import { useUser } from '../../contex/UserContext';
+import { useAPI } from '../../contex/ApiContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
-  const {user} = useUser();
-  console.log("user: ",user);
+  const nanigate = useNavigate();
+  const {FectUser , acdimytoken} = useUser();
+
+  useEffect(()=>{
+    FectUser();
+  },[]);
+
+  useEffect(()=>{
+   if(!acdimytoken){
+    nanigate("/login");
+   }
+  },[])
+
+
+
   return (
     <div className="p-4 space-y-6">
       {/* Header */}

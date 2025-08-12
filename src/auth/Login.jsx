@@ -10,22 +10,26 @@ import { useNavigate } from 'react-router-dom';
 function Login() {
   const [loading , setLoading] = useState(false)
   const navigate = useNavigate();
-  const {setUser} = useUser();
+  const {setUser ,FectUser ,setAcadimyToken} = useUser();
   const {apiUrl} = useAPI()
   const {register,handleSubmit,formState: { errors }} = useForm();
 
   const onSubmit = (data) => {
+    console.log(data)
+
     axios.post(`${apiUrl}/auth/login.php` , data)
     .then((res)=>{
       setLoading(true)
       const data = res?.data;
-      localStorage.setItem("acadimy_user" , JSON.stringify(data?.user));
-      localStorage.setItem("token" ,data?.token);
+      // console.log(data)
+      // localStorage.setItem("acadimy_user" , JSON.stringify(data?.user));
+      localStorage.setItem("acadimy_token" ,data?.token);
+      setAcadimyToken(data?.token)
       setUser(data?.user);
       toast.success(res.data.message);
       setTimeout(()=>{
         navigate("/");
-        setLoading(flase)
+        setLoading(false)
       },1000)
     })
     .catch((err)=>{
@@ -39,18 +43,21 @@ function Login() {
         <h2 className="text-2xl font-bold text-center text-blue-600 mb-6">Login to Your Account</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="block sm:font-semibold sm:text-base  text-sm font-medium text-gray-700">Email / Username {errors.email && <span className="text-sm text-red-500 mt-1">({errors.email.message})</span>}</label>
+            <label className="block sm:font-semibold sm:text-base  text-sm font-medium text-gray-700">Username {errors.username && <span className="text-sm text-red-500 mt-1">({errors.username.message})</span>}</label>
             <input
-              type="email"
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /^\S+@\S+$/i,
-                  message: "Invalid email format",
+              {...register("username", {
+                required: "Username is required",
+                minLength: {
+                  value: 5,
+                  message: "Username must be at least 5 characters",
+                },
+                maxLength: {
+                  value: 20,
+                  message: "Username must be at most 20 characters",
                 },
               })}
-              className="w-full text-[#355460] placeholder:text-[#608c9e] bg-[#a6d9ef] border-none outline-none mt-1 px-4 py-2 border rounded-md "
-              placeholder="you@example.com"
+              className="w-full text-[#355460] placeholder:text-[#608c9e] bg-[#a6d9ef] border-none outline-none mt-1 px-4 py-2 border rounded-md shadow-sm "
+              placeholder="Your Username"
             />
             
           </div>
@@ -67,7 +74,7 @@ function Login() {
                 },
               })}
               className="w-full text-[#355460] placeholder:text-[#608c9e] bg-[#a6d9ef] mt-1 px-4 py-2 border-none outline-none rounded-md "
-              placeholder="••••••••"
+              placeholder="inter your password..."
             />
             
           </div>

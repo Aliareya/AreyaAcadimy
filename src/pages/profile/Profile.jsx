@@ -1,117 +1,58 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, {useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Pencil } from "lucide-react";
 import { useUser } from "../../contex/UserContext";
 import { useAPI } from "../../contex/ApiContext";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
-  const { user, setUser ,Fetchuser } = useUser();
-  const { imageurl, apiUrl ,token } = useAPI();
+  const navigate = useNavigate();
+  const { user, acdimytoken ,FectUser } = useUser();
+  const { apiUrl , imageurl } = useAPI();
 
-  const fileInputRef = useRef(null);
+
   const [isEdit, setIsEdit] = useState(false);
-  const [profileImage, setProfileImage] = useState(
-    user?.imgUrl ? `${imageurl}${user.imgUrl}` : null
-  );
-  const [imageFile, setImageFile] = useState(null); 
-
-  // React Hook Form setup
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isDirty }
-  } = useForm({
+ 
+  const {register,handleSubmit,formState: { errors, isDirty }} = useForm({
     defaultValues: {
-      name: user?.name || "",
-      email: user?.email || "",
-      bio: user?.bio || ""
+      name: user?.name ,
+      bio: user?.bio 
     }
   });
 
-  // Sync form with user data on mount or user changes
-  useEffect(() => {
-    reset({
-      name: user?.name || "",
-      email: user?.email || "",
-      bio: user?.bio || ""
-    });
-    setProfileImage(user?.imgUrl ? `${imageurl}${user.imgUrl}` : null);
-    setImageFile(null);
-  }, [user, imageurl, reset]);
-
-  /** Handle image upload preview */
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    if (!file.type.startsWith("image/")) {
-      toast.error("Please select a valid image file.");
-      return;
+  const handleEditUser = async (data) => {
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("bio", data.bio);
+    if (data.image && data.image[0]) {
+      formData.append("image", data.image[0]);
     }
-    if (file.size > 2 * 1024 * 1024) {
-      toast.error("Image size should be under 2MB.");
-      return;
-    }
-
-    setProfileImage(URL.createObjectURL(file));
-    setImageFile(file);
-  };
-
-  /** Save profile changes */
-  const onSubmit = async (data) => {
-    if (data.bio.length > 300) {
-      toast.error("Bio cannot exceed 300 characters.");
-      return;
-    }
-
-    const isNameChanged = data.name !== user?.name;
-    const isBioChanged = data.bio !== (user?.bio || "");
-    const isImageChanged = imageFile !== null;
-
-    if (!isNameChanged && !isBioChanged && !isImageChanged) {
-      toast.info("No changes to update.");
-      return;
-    }
-
-    const uploadData = new FormData();
-    uploadData.append("name", data.name);
-    uploadData.append("bio", data.bio);
-    if (isImageChanged) uploadData.append("image", imageFile);
-
+  
     try {
-      const response = await axios.post(`${apiUrl}/users/EditProfile.php`, uploadData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          "Authorization" : `Bearer ${token}`
+      const response = await axios.post(
+        `${apiUrl}/users/EditProfile.php`,formData,{
+          headers: {
+            'Authorization': `Bearer ${acdimytoken}`,
+          },
         }
-      });
-
-      if (response.data.success) {
-        toast.success("Profile updated successfully!");
-        Fetchuser()
-        setUser((prevUser) => ({
-          ...prevUser,
-          name: data.name,
-          bio: data.bio,
-          imgUrl: response.data.imgUrl || prevUser.imgUrl
-        }));
-        setIsEdit(false);
-        setImageFile(null);
-      } else {
-        console.log(response)
-        toast.error(response.data.message || "Failed to update profile.");
-      }
+      );
+      FectUser();
+      toast.success(response.data.message);
     } catch (error) {
-      toast.error("An error occurred while updating profile.");
+      console.log("error:" , error)
+      toast.error("Failed to update profile");
     }
-  };
+
+  }
 
   useEffect(()=>{
-    Fetchuser()
+    if(!acdimytoken){
+      navigate("/login");
+    }
   },[])
+
+
 
   return (
     <div className="min-h-screen bg-gray-100 p-8 sm:p-3">
@@ -123,51 +64,27 @@ export default function Profile() {
           <h3 className="text-xl font-semibold mb-4">👤 View Profile</h3>
 
           <div className="flex relative items-center mb-6">
-            <div
-              className={`relative group ${isEdit ? "cursor-pointer" : ""}`}
-              onClick={() => isEdit && fileInputRef.current.click()}
-            >
-              <img
-                src={profileImage || `${imageurl}${user?.imgUrl}`}
-                alt="User Avatar"
-                className="w-20 h-20 rounded-full object-cover border"
-              />
-              {isEdit && (
-                <div className="absolute inset-0 bg-black bg-opacity-40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                  <Pencil size={20} className="text-white" />
+            {user?.image ? (
+              <div className="w-24 h-24  rounded-full bg-cover bg-center bg-no-repeat" style={{backgroundImage:`url(${imageurl}${user.image})`}} >
+              </div>
+            ):(
+            <div className=" w-14 h-14 rounded-full text-2xl bg-gray-200 text-center flex items-center justify-center font-medium">
+                  {user?.logo}
                 </div>
-              )}
-              <input
-                type="file"
-                accept="image/*"
-                ref={fileInputRef}
-                onChange={handleImageChange}
-                className="hidden"
-              />
-            </div>
+
+            )}
 
             <div className="ml-4">
               <h4 className="text-lg font-bold">{user?.name}</h4>
               <div className="flex gap-2 mt-1">
                 <span className="bg-gray-200 text-sm text-gray-800 px-2 py-1 rounded-full">
-                  Teacher
+                  {user?.role}
                 </span>
               </div>
             </div>
 
             <button
-              onClick={() => {
-                if (isEdit) {
-                  reset({
-                    name: user?.name || "",
-                    email: user?.email || "",
-                    bio: user?.bio || ""
-                  });
-                  setProfileImage(user?.imgUrl ? `${imageurl}${user.imgUrl}` : null);
-                  setImageFile(null);
-                }
-                setIsEdit((prev) => !prev);
-              }}
+              onClick={() => {setIsEdit((prev) => !prev);}}
               className="absolute -top-12 right-1 cursor-pointer hover:bg-slate-300 bg-slate-200 rounded-md px-3 py-1"
             >
               {isEdit ? "Cancel Edit" : "Edit"}
@@ -185,14 +102,14 @@ export default function Profile() {
               <strong>Bio:</strong> {user?.bio}
             </div>
             <div className="text-gray-500 mt-4">
-              📅 Joined {new Date(user?.create_at).toLocaleDateString()}
+              📅 Joined {new Date(user?.created_at).toLocaleDateString()}
             </div>
           </div>
         </div>
 
         {/* Edit Profile */}
         <form
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(handleEditUser)}
           className={`${
             !isEdit ? "bg-slate-100 pointer-events-none opacity-60" : "bg-white"
           } p-6 sm:px-3 rounded-xl shadow-md`}
@@ -216,17 +133,23 @@ export default function Profile() {
                 <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>
               )}
             </div>
+
             <div>
-              <label htmlFor="email" className="block font-medium text-gray-700">
-                Email <span className="text-sm text-gray-400">(Not Editable)</span>
+              <label htmlFor="name" className="block font-medium text-gray-700">
+                Name
               </label>
               <input
-                id="email"
-                {...register("email")}
-                className="mt-1 w-full px-3 py-2 border rounded-md bg-gray-100 cursor-not-allowed"
-                disabled
+                id="name"
+                type="file"
+                accept="image/*"
+                {...register("image")}
+                className={`mt-1 w-full px-3 py-2 border rounded-md ${
+                  errors.name ? "border-red-500" : "border-gray-300"
+                }`}
+                disabled={!isEdit}
               />
             </div>
+            
             <div className="md:col-span-2">
               <label htmlFor="bio" className="block font-medium text-gray-700">
                 Bio
@@ -251,7 +174,7 @@ export default function Profile() {
           {isEdit && (
             <button
               type="submit"
-              disabled={!isDirty && !imageFile}
+              disabled={!isDirty}
               className="mt-6 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:bg-gray-400"
             >
               Save Profile

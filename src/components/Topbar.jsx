@@ -1,33 +1,35 @@
-import React from 'react';
-import { Icon } from '@iconify/react';
-import { useUser } from '../contex/UserContext';
-import { useAPI } from '../contex/ApiContext';
+import React from "react";
+import { Icon } from "@iconify/react";
+import { useUser } from "../contex/UserContext";
+import { useAPI } from "../contex/ApiContext";
 
 function Topbar({ setShowSidebar }) {
-  const {user} = useUser();
-  const {imageurl} = useAPI();
-  
-  const handlesidebar = () =>{
-    setShowSidebar(true)
-  }
+  const { user } = useUser();
+  const { imageurl } = useAPI();
 
-  const date =new Date();
+  const handlesidebar = () => {
+    setShowSidebar(true);
+  };
+
+  const date = new Date();
   const today = date.toDateString();
- 
 
   return (
     <div className="w-full h-16 sticky top-0 z-20 px-4 bg-slate-200 border-b border-gray-400 flex items-center justify-between ">
-      
       <div className="flex items-center gap-4">
-        <button 
+        <button
           className="hidden md:block sm:block text-gray-700 text-2xl"
           onClick={handlesidebar}
         >
           <Icon icon="material-symbols:menu" />
         </button>
 
-        <h1 className="text-lg font-semibold hidden md:block sm:hidden">Areya Acadimy</h1>
-        <h1 className='md:hidden sm:hidden text-gray-600 font-medium'>{today}</h1>
+        <h1 className="text-lg font-semibold hidden md:block sm:hidden">
+          Areya Acadimy
+        </h1>
+        <h1 className="md:hidden sm:hidden text-gray-600 font-medium">
+          {today}
+        </h1>
       </div>
 
       {/* Right - Notification + User Info */}
@@ -42,11 +44,14 @@ function Topbar({ setShowSidebar }) {
         <span className="text-gray-700 font-medium">{user?.name}</span>
 
         {/* User avatar */}
-        <img
-          src={`${imageurl}/${user?.imgUrl}`}
-          alt="User"
-          className="w-8 h-8 rounded-full object-cover border"
-        />
+        {user?.image ? (
+          <div className="w-9 h-9 bg-no-repeat bg-center bg-cover  rounded-full" style={{backgroundImage:`url(${imageurl}${user.image})`}}>
+          </div>
+        ) : (
+          <div className=" w-7 h-7 border bg-white border-green-700 rounded-full  text-xl text-center flex items-center justify-center font-bold">
+            {user?.logo}
+          </div>
+        )}
       </div>
     </div>
   );

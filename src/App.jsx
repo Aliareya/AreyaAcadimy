@@ -17,6 +17,11 @@ import Roles from "./pages/roles/Roles";
 import AddStudent from "./pages/addstudent/AddStudent";
 import RecordAttendance from "./pages/attendence/RecordAttendance";
 import Profile from "./pages/profile/Profile";
+import RegisterUser from "./pages/adduser/RegisterUser";
+import AddTeacher from "./pages/addTeacher/AddTeacher";
+import AdminRoute from "./auth/AdminRoute";
+import TeacherRoutes from "./auth/TeacherRoutes";
+import NotFonud from "./pages/NotFonud";
 
 function App() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -82,16 +87,19 @@ function App() {
 
         <div className="w-full h-fit bg-slate-50">
           <Routes>
+            <Route path="/addusers" element={<AdminRoute><RegisterUser /></AdminRoute>} />
+            <Route path="/addteacher" element={<AdminRoute><AddTeacher /></AdminRoute>} />
+            <Route path="/roles" element={<AdminRoute><Roles /></AdminRoute>} />
+            <Route path="/addstudent" element={<AdminRoute><AddStudent /></AdminRoute>} />
             <Route path="/" element={<Home />} />
             <Route path="/student" element={<Student />} />
             <Route path="/teacher" element={<Teachers />} />
             <Route path="/attendance" element={<Attendance />} />
-            <Route path="/roles" element={<Roles />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/addstudent" element={<AddStudent />} />
-            <Route path="/recordAttendance" element={<RecordAttendance />} />
+            <Route path="/recordAttendance" element={<TeacherRoutes><RecordAttendance /></TeacherRoutes>} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="*" element={<NotFonud/>} />
           </Routes>
         </div>
       </div>

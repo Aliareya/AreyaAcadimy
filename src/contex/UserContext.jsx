@@ -1,54 +1,37 @@
 import axios from "axios";
-import { createContext, useContext, useState } from "react";
-import { useAPI } from "./ApiContext";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const { apiUrl } = useAPI();
+  const [user, setUser] = useState([]);
+  const [acdimytoken , setAcadimyToken] = useState(()=>{
+    const token = localStorage.getItem("acadimy_token")
+    return token || null
+  })
 
-  // تابع امن برای خواندن و Parse کردن JSON از localStorage
-  const safeGetUser = () => {
-    try {
-      const raw = localStorage.getItem("acadimy_user");
-      // اگر چیزی ذخیره نشده یا مقدارش اشتباه باشه
-      if (!raw || raw === "undefined" || raw === "null") {
-        return {}; // کاربر پیش‌فرض خالی
+  const FectUser = () =>{
+    axios.get("http://localhost/acadimy/api/users/singleuser.php",{
+      headers:{
+        "Authorization" : `Bearer ${acdimytoken}`
       }
-      return JSON.parse(raw);
-    } catch (e) {
-      console.error("خطا در parse کردن acadimy_user از localStorage:", e);
-      return {};
-    }
-  };
+    })
+    .then((res)=>{
+      setUser(res?.data?.user)
+    })
+    .catch((err)=>{
+      console.log("fetch err",err)
+    })
+  }
 
-  const [user, setUser] = useState(safeGetUser);
 
-  const Fetchuser = () => {
-    if (!user.id) return;
-    console.log(user?.id) // اگر ایمیل نداشت درخواست نفرست
-
-    axios
-      .get(`http://localhost/acadimy/api/users/singleuser.php?id=${user?.id}`)
-      .then((res) => {
-        if (res.data?.user) {
-          console.log(res)
-          setUser(res.data?.user);
-          localStorage.setItem(
-            "acadimy_user",
-            JSON.stringify(res.data?.user)
-          );
-        } else {
-          console.log("هیچ اطلاعات کاربری از API دریافت نشد");
-        }
-      })
-      .catch((err) => {
-        console.log("خطا در گرفتن اطلاعات کاربر:", err);
-      });
-  };
+  useEffect(()=>{
+   setAcadimyToken(localStorage.getItem("acadimy_token"));
+   FectUser();
+  },[acdimytoken])
 
   return (
-    <UserContext.Provider value={{ user, setUser, Fetchuser }}>
+    <UserContext.Provider value={{ user, setUser, FectUser ,acdimytoken , setAcadimyToken }}>
       {children}
     </UserContext.Provider>
   );
