@@ -7,25 +7,25 @@ function AdminRoute({ children }) {
   const {user , FectUser , acdimytoken} = useUser();
   const [isAuthorized, setIsAuthorized] = useState(null);
 
-   useEffect(()=>{
-      FectUser();
-    },[]);
+  //  useEffect(()=>{
+  //     FectUser();
+  //   },[]);
 
 
-  useEffect(() => {
-  if (user && user.role && acdimytoken !== undefined) {
-    if (acdimytoken && user.role === "admin") {
-      setIsAuthorized(true);
-    } else {
-      navigate("/notfound");
-    }
-  }
-}, [user, acdimytoken, navigate]);
+//   useEffect(() => {
+//   // if (user && user.role && acdimytoken !== undefined) {
+//   //   if (acdimytoken && user.role === "admin") {
+//   //     setIsAuthorized(true);
+//   //   } else {
+//   //     navigate("/notfound");
+//   //   }
+//   // }
+// }, [user, acdimytoken, navigate]);
 
 
-  if (isAuthorized === null) {
-    return <div>Loading...</div>;
-  }
+  // if (isAuthorized === null) {
+  //   return <div>Loading...</div>;
+  // }
 
   return children;
 }

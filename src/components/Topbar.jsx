@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { useUser } from "../contex/UserContext";
 import { useAPI } from "../contex/ApiContext";
@@ -6,6 +6,19 @@ import { useAPI } from "../contex/ApiContext";
 function Topbar({ setShowSidebar }) {
   const { user } = useUser();
   const { imageurl } = useAPI();
+
+  // state برای ذخیره عرض صفحه
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowWidth(window.innerWidth);
+    }
+    window.addEventListener("resize", handleResize);
+
+    // پاک‌سازی listener هنگام unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handlesidebar = () => {
     setShowSidebar(true);
@@ -44,12 +57,14 @@ function Topbar({ setShowSidebar }) {
         <span className="text-gray-700 font-medium">{user?.name}</span>
 
         {/* User avatar */}
-        {user?.image ? (
-          <div className="w-9 h-9 bg-no-repeat bg-center bg-cover  rounded-full" style={{backgroundImage:`url(${imageurl}${user.image})`}}>
-          </div>
+        {user?.image && windowWidth > 700 ? (
+          <div
+            className="w-9 h-9 bg-no-repeat bg-center bg-cover rounded-full"
+            style={{ backgroundImage: `url(${imageurl}${user?.image})` }}
+          ></div>
         ) : (
-          <div className=" w-7 h-7 border bg-white border-green-700 rounded-full  text-xl text-center flex items-center justify-center font-bold">
-            {user?.logo}
+          <div className="text-black w-7 h-7 border bg-white border-green-700 rounded-full text-xl text-center flex items-center justify-center font-bold">
+            <h1>{user?.logo}</h1>
           </div>
         )}
       </div>
