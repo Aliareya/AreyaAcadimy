@@ -15,14 +15,11 @@ function Login() {
   const {register,handleSubmit,formState: { errors }} = useForm();
 
   const onSubmit = (data) => {
-    console.log(data)
-
-    axios.post(`${apiUrl}/auth/login.php` , data)
+    axios.post(`${apiUrl}/auth/login` , data)
     .then((res)=>{
+      console.log("success",  res)
       setLoading(true)
       const data = res?.data;
-      // console.log(data)
-      // localStorage.setItem("acadimy_user" , JSON.stringify(data?.user));
       localStorage.setItem("acadimy_token" ,data?.token);
       setAcadimyToken(data?.token)
       setUser(data?.user);
@@ -33,6 +30,7 @@ function Login() {
       },1000)
     })
     .catch((err)=>{
+      console.log("error",err);
       toast.error(err?.response?.data?.message);
     })
   };

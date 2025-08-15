@@ -16,13 +16,15 @@ function RegisterUser() {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data)
+    console.log(data);
+    // http://localhost/areyaAcadimy/api/auth/register.php
     axios
-      .post(`${apiUrl}/auth/register.php`, data , {
+      .post(`${apiUrl}/auth/register`, data , {
         headers:{
           "Authorization" : `Bearer ${acdimytoken}`
         }
@@ -31,8 +33,9 @@ function RegisterUser() {
         setLoding(true);
         
         setTimeout(() => {
-          toast.success(res.data.response);
+          toast.success(res.data.message);
           setLoding(false); 
+          reset();
         }, 500); 
       })
       .catch((err) => {
@@ -60,7 +63,7 @@ function RegisterUser() {
               )}
             </label>
             <input
-              {...register("name", { required: "Name is required" })}
+              {...register("full_name", { required: "Name is required" })}
               className="w-full text-gray-500 placeholder:text-gray-400 bg-gray-200 border-none outline-none mt-1 px-4 py-2 border rounded-md shadow-sm "
               placeholder="Your full name"
             />
@@ -118,11 +121,7 @@ function RegisterUser() {
           <div>
             <label className="block text-base sm:font-semibold sm:text-base  font-medium text-gray-700">
               Role{" "}
-              {errors.password && (
-                <span className="text-sm text-red-500 mt-1">
-                  ({errors.password.message})
-                </span>
-              )}
+              
             </label>
             <select className="w-full text-gray-500 placeholder:text-gray-400 bg-gray-200 mt-1 px-4 py-2 border-none outline-none rounded-md "
              name="" id="" {...register("role", {

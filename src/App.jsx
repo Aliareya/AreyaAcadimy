@@ -11,7 +11,6 @@ import Home from "./pages/home/Home";
 import Student from "./pages/student/Student";
 import Teachers from "./pages/teacher/Teachers";
 import Attendance from "./pages/attendence/Attendance";
-import Signup from "./auth/Signup";
 import Login from "./auth/Login";
 import Roles from "./pages/roles/Roles";
 import AddStudent from "./pages/addstudent/AddStudent";
@@ -28,7 +27,7 @@ function App() {
   const location = useLocation();
 
   // check if current page is login/signup
-  const isAuthPage = location.pathname === "/signup" || location.pathname === "/login";
+  const isAuthPage =location.pathname === "/login";
 
   // Toggle handler
   const onToggleSidebar = () => {
@@ -95,7 +94,6 @@ function App() {
             <Route path="/student" element={<Student />} />
             <Route path="/teacher" element={<Teachers />} />
             <Route path="/attendance" element={<Attendance />} />
-            <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/recordAttendance" element={<TeacherRoutes><RecordAttendance /></TeacherRoutes>} />
             <Route path="/profile" element={<Profile />} />

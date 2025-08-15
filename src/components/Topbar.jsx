@@ -7,7 +7,6 @@ function Topbar({ setShowSidebar }) {
   const { user } = useUser();
   const { imageurl } = useAPI();
 
-  // state برای ذخیره عرض صفحه
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -16,7 +15,6 @@ function Topbar({ setShowSidebar }) {
     }
     window.addEventListener("resize", handleResize);
 
-    // پاک‌سازی listener هنگام unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -54,7 +52,7 @@ function Topbar({ setShowSidebar }) {
         </button>
 
         {/* Username */}
-        <span className="text-gray-700 font-medium">{user?.name}</span>
+        <span className="text-gray-700 font-medium">{user?.username}</span>
 
         {/* User avatar */}
         {user?.image && windowWidth > 700 ? (
@@ -63,7 +61,7 @@ function Topbar({ setShowSidebar }) {
             style={{ backgroundImage: `url(${imageurl}${user?.image})` }}
           ></div>
         ) : (
-          <div className="text-black w-7 h-7 border bg-white border-green-700 rounded-full text-xl text-center flex items-center justify-center font-bold">
+          <div className="text-black w-7 h-7 border bg-white border-green-700 rounded-full text-sm text-center flex items-center justify-center font-bold">
             <h1>{user?.logo}</h1>
           </div>
         )}

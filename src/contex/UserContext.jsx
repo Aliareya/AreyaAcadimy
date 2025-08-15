@@ -11,7 +11,7 @@ export const UserProvider = ({ children }) => {
   })
 
   const FectUser = () =>{
-    axios.get("http://localhost/acadimy/api/users/singleuser.php",{
+    axios.get("http://localhost/areyaAcadimy/api/users/singleuser",{
       headers:{
         "Authorization" : `Bearer ${acdimytoken}`
       }

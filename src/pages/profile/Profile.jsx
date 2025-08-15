@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 export default function Profile() {
   const navigate = useNavigate();
   const { user, acdimytoken ,FectUser } = useUser();
+  console.log(user)
   const { apiUrl , imageurl } = useAPI();
 
 
@@ -75,7 +76,7 @@ export default function Profile() {
             )}
 
             <div className="ml-4">
-              <h4 className="text-lg font-bold">{user?.name}</h4>
+              <h4 className="text-lg font-bold">{user?.full_name}</h4>
               <div className="flex gap-2 mt-1">
                 <span className="bg-gray-200 text-sm text-gray-800 px-2 py-1 rounded-full">
                   {user?.role}
